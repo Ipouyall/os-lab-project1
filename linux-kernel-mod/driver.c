@@ -5,11 +5,11 @@
 #include <linux/proc_fs.h>
 
 MODULE_AUTHOR("group#3 members");
-MODULE_DESCRIPTION("this module print group#3's member name");
+MODULE_DESCRIPTION("this module print group#3's members name");
 MODULE_LICENSE("GPL");
 
 static int __init printing_members(void) {
-    printk(KERN_INFO "Pouya Sadeghi, Ali Ataollahi, Ali hodaee");
+    printk(KERN_INFO "Pouya Sadeghi, Ali Ataollahi, Ali Hodaee");
     return 0;
 }
 static void __exit exiting_module(void) {
