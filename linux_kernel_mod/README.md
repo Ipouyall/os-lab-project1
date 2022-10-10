@@ -19,5 +19,10 @@ sudo rmmod driver
 
 to see kernel logs
 ```shell
-dmesg
+sudo dmesg
+```
+
+to clean directory
+```shell
+make clean
 ```
