@@ -22,9 +22,10 @@ if make faces 'permission denied' error type:
 sudo chmod 777 <file-name>
 ```
 ## Run
-```
+```shell
 make qemu 
 ```
+![Diagram](screenshots/xv6-boot.png)
 or you want to run in terminal , type:
 ```
 make qemu-nox
