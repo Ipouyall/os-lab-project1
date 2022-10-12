@@ -86,3 +86,15 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 *.lnk
+=======
+*.sys
+*.img
+*.asm
+*.sym
+*.S
+initcode
+bootblock
+entryother
+kernel
+_*
+mkfs
