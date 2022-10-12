@@ -73,3 +73,5 @@ dkms.conf
 .directory
 .Trash-*
 .nfs*
+*.sys
+*.img
