@@ -2,6 +2,7 @@
 #include "fcntl.h"
 #include "user.h"
 
+// custom implementation of atoi
 int achar_to_int(char c[])
 {
     int num = 0, i;
@@ -19,31 +20,6 @@ int achar_to_int(char c[])
     return num;
 }
 
-int int_len(int num)
-{
-    int len = 1;
-    num /= 10;
-    while (num != 0)
-    {
-        len++;
-        num /= 10;
-    }
-    return len;
-}
-
-char* int_to_achar(int num, int len)
-{
-    char c[len+1];
-    int i;
-    for(i=len-1; i>=0; i--)
-    {
-        c[i] = (num%10) + '0';
-        num /= 10;
-    }
-    c[len] = ' ';
-    return c;
-}
-
 // program to get two number as command line arguments and print prime number between them
 int main(int argc, char *argv[])
 {
@@ -58,7 +34,7 @@ int main(int argc, char *argv[])
     n2 = achar_to_int(argv[2]);
     if (n1 == -1 || n2 == -1)
     {
-        printf(1, "Error in numbers; please enter uints.\n");
+        printf(1, "Error in numbers; please enter uint numbers.\n");
         exit();
     }
     if (n1 > n2)
@@ -92,12 +68,10 @@ int main(int argc, char *argv[])
         }
         if (flag == 0)
         {
-            int len = int_len(i);
-            char* n = int_to_achar(i, len);
-            write(file, n, strlen(n));
+            printf(file, "%d ", i);
         }
     }
-    write(file, "\0", 1);
+    printf(file, "\n");
     close(file);
     exit();
 }

@@ -79,6 +79,8 @@ dkms.conf
 *.sym
 *.S
 initcode
-bootlock
+bootblock
 entryother
 kernel
+_*
+mkfs
