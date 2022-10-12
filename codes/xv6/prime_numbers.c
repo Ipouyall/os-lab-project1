@@ -2,50 +2,64 @@
 #include "fcntl.h"
 #include "user.h"
 
-int achar_to_int(char c[]){
+int achar_to_int(char c[])
+{
     int num = 0, i;
-    if (c[0] == '-'){
-        return -1;
-    }
-    for(i=0; c[i] != '\0'; i++){
-        num = num*10 + (c[i] - '0');
+    for(i=0; c[i] != '\0'; i++)
+    {
+        if ('0' <= c[i] <= '9')
+        {
+            num = num * 10 + (c[i] - '0');
+        }
+        else
+        {
+            return -1;
+        }
     }
     return num;
 }
 
-int int_len(int num){
+int int_len(int num)
+{
     int len = 1;
     num /= 10;
-    while (num != 0){
+    while (num != 0)
+    {
         len++;
         num /= 10;
     }
     return len;
 }
 
-char* int_to_achar(int num, int len){
+char* int_to_achar(int num, int len)
+{
     char c[len+1];
     int i;
-    for(i=len-1; i>=0; i--){
+    for(i=len-1; i>=0; i--)
+    {
         c[i] = (num%10) + '0';
         num /= 10;
     }
-    c[len] = '\0';
+    c[len] = ' ';
     return c;
 }
 
 // program to get two number as command line arguments and print prime number between them
 int main(int argc, char *argv[])
 {
-    if (argc != 3) {
-
+    if (argc != 3)
+    {
+        printf(1, "Error in calling; please call like:\n prime_numbers <number1> <number2>\n");
+        exit();
     }
     int i, j, flag, start, end, n1, n2;
 
     n1 = achar_to_int(argv[1]);
     n2 = achar_to_int(argv[2]);
-    if (n1 == -1 || n2 == -1) {
-
+    if (n1 == -1 || n2 == -1)
+    {
+        printf(1, "Error in numbers; please enter uints.\n");
+        exit();
     }
     if (n1 > n2)
     {
@@ -56,6 +70,10 @@ int main(int argc, char *argv[])
     {
         start = n1;
         end = n2;
+    }
+    if (start < 2)
+    {
+        start = 2;
     }
 
     unlink("prime_numbers.txt");
@@ -79,5 +97,7 @@ int main(int argc, char *argv[])
             write(file, n, strlen(n));
         }
     }
+    write(file, "\0", 1);
     close(file);
+    exit();
 }
