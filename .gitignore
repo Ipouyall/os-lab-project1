@@ -75,3 +75,10 @@ dkms.conf
 .nfs*
 *.sys
 *.img
+*.asm
+*.sym
+*.S
+initcode
+bootlock
+entryother
+kernel
