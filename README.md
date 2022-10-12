@@ -1,11 +1,11 @@
 # os-project1
 ## installation
 ### install dependencies
-```
+```shell
 sudo apt install qemu
 ```
-```
-sudo apt install qemu qemu-install-x86
+```shell
+sudo apt install qemu-install-x86
 ```
 ### run xv6
 **Attention** make sure you are in codes/xv6 directory
@@ -22,7 +22,7 @@ make qemu-nox
 ```
 
 ## clean generated files:
-```
+```shell
 make clean
 ```
 ***
