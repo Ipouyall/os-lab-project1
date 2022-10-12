@@ -25,16 +25,16 @@ int main(int argc, char *argv[])
 {
     if (argc != 3)
     {
-        printf(1, "Error in calling; please call like:\n prime_numbers <number1> <number2>\n");
+        printf(2, "Error in calling; please call like:\n prime_numbers <number1> <number2>\n");
         exit();
     }
-    int i, j, flag, start, end, n1, n2;
+    int i, j, not_prime, start, end, n1, n2;
 
     n1 = achar_to_int(argv[1]);
     n2 = achar_to_int(argv[2]);
     if (n1 == -1 || n2 == -1)
     {
-        printf(1, "Error in numbers; please enter uint numbers.\n");
+        printf(2, "Error in numbers; please enter uint numbers.\n");
         exit();
     }
     if (n1 > n2)
@@ -57,16 +57,16 @@ int main(int argc, char *argv[])
 
     for (i = start; i <= end; i++)
     {
-        flag = 0;
+        not_prime = 0;
         for (j = 2; j <= i / 2; j++)
         {
             if (i % j == 0)
             {
-                flag = 1;
+                not_prime = 1;
                 break;
             }
         }
-        if (flag == 0)
+        if (not_prime == 0)
         {
             printf(file, "%d ", i);
         }
