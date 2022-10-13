@@ -98,3 +98,4 @@ entryother
 kernel
 _*
 mkfs
+.gdbinit
