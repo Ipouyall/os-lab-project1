@@ -28,9 +28,9 @@ make clean
 ***
 ## boot xv6
 
-![members name](screenshots/xv6-boot.png "booted xv6")
+![members name](docs/screenshots/xv6-boot.png "booted xv6")
 
 ***
 ## run and test user level app
 
-![user level app](screenshots/prime_numbers.png "prime numbers app")
+![user level app](docs/screenshots/prime_numbers.png "prime numbers app")
