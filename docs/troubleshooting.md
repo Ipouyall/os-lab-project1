@@ -32,19 +32,11 @@ target remote localhost:26000
 ```shell
 maintenance info breakpoints 
 ```
-or 
-```shell
-maint info breakpoints
-```
 or
 ```shell
 info breakpoints
 ```
-or just
-```shell
-i b
-```
-![list breakpoints](screenshots/troubleshooting/list-bp.png)
+![list breakpoints](screenshots/troubleshooting/list-bps.png)
 ### to set breakpoint
 add by function name:
 ```shell
@@ -58,6 +50,8 @@ add by address:
 ```shell
 break *0x[address]
 ```
+![gdb triggered](screenshots/troubleshooting/triggerd-bp.png)
+![qemu triggered](screenshots/troubleshooting/triggerd-bp-qemu.png)
 ### to delete breakpoint
 if you want to delete breakpoint by number(you can see it in `info breakpoints`):
 ```shell
