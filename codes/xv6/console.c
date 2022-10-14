@@ -142,7 +142,7 @@ getcr() {
 }
 
 static void 
-changecr(int pos) {
+changepos(int pos) {
   outb(CRTPORT, 14);
   outb(CRTPORT+1, pos>>8);
   outb(CRTPORT, 15);
@@ -173,7 +173,7 @@ cgaputc(int c)
     memset(crt+pos, 0, sizeof(crt[0])*(24*80 - pos));
   }
 
-  changecr(pos);
+  changepos(pos);
   if(c == BACKSPACE)
     crt[pos] = ' ' | 0x0700;
 }
@@ -209,7 +209,7 @@ void
 shiftrinput() {
   int index, next_char, pos;
   pos = getcr();
-  changecr(pos + 1);
+  changepos(pos + 1);
   index = input.e;
   next_char = input.buf[index % INPUT_BUF];
   while(index < input.end) {
@@ -220,7 +220,7 @@ shiftrinput() {
     index++;
   }
   input.end++;
-  changecr(pos);
+  changepos(pos);
 }
 
 void
@@ -235,7 +235,7 @@ shiftlinput() {
   }
   consputc(' ');
   input.end--;
-  changecr(pos);
+  changepos(pos);
 }
 
 void gotofirstofline() {
@@ -244,14 +244,23 @@ void gotofirstofline() {
   int change;
   change = pos%80 - 2;
   input.e -= change;
-  changecr(pos - change);
+  changepos(pos - change);
 }
+
+void chnagecursor(int val){
+  int pos=getcr();
+  pos += val;
+  changepos(pos);
+  input.e += val;
+}
+
 int isnum(int c) {
   if(c >= '0' && c<='9')
     return 1;
   else
     return 0;
 }
+
 void
 consoleintr(int (*getc)(void))
 {
@@ -285,7 +294,7 @@ consoleintr(int (*getc)(void))
         int pos = getcr();
         if(isnum(input.buf[(input.e) % INPUT_BUF])){
           int pos=getcr();
-          changecr(++pos);
+          changepos(++pos);
           input.e++;
           consputc(BACKSPACE);
           shiftlinput();
@@ -294,13 +303,22 @@ consoleintr(int (*getc)(void))
         else{
           input.buf[(input.e) % INPUT_BUF] = input.buf[(input.e) % INPUT_BUF];
           consputc(input.buf[(input.e) % INPUT_BUF]);
-          changecr(++pos);
+          changepos(++pos);
           input.e++;
         }
       }
       break;
     }
-    case C('R'):{
+    case C('R'): {
+      int first=2,end=3;
+      char tmp;
+      char c1 = input.buf[(input.e - first) % INPUT_BUF];
+      char c2 = input.buf[(input.e - end) % INPUT_BUF];
+
+      chnagecursor(-1);
+      consputc(c2);
+      chnagecursor(-1);
+      consputc(c1); 
       break;
     }
     default:
