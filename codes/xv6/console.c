@@ -205,9 +205,43 @@ struct {
   uint r;  // Read index
   uint w;  // Write index
   uint e;  // Edit index
+  uint end; //end index
 } input;
 
 #define C(x)  ((x)-'@')  // Control-x
+
+void
+shiftrinput() {
+  int index, next_char, pos;
+  pos = getcr();
+  changecr(pos + 1);
+  index = input.e;
+  next_char = input.buf[index % INPUT_BUF];
+  while(index < input.end) {
+    int tmp = next_char;
+    next_char = input.buf[(index + 1) % INPUT_BUF];
+    input.buf[(index + 1) % INPUT_BUF] = tmp;
+    consputc(input.buf[(index + 1) % INPUT_BUF]);
+    index++;
+  }
+  input.end++;
+  changecr(pos);
+}
+
+void
+shiftlinput() {
+  int index, pos;
+  pos = getcr();
+  index = input.e - 1;
+  while(index < input.end) {
+    input.buf[index % INPUT_BUF] = input.buf[(index + 1) % INPUT_BUF];
+    consputc(input.buf[index % INPUT_BUF]);
+    index++;
+  }
+  consputc(' ');
+  input.end--;
+  changecr(pos);
+}
 
 void
 consoleintr(int (*getc)(void))
