@@ -247,13 +247,6 @@ void gotofirstofline() {
   changepos(pos - change);
 }
 
-void chnagecursor(int val){
-  int pos=getcr();
-  pos += val;
-  changepos(pos);
-  input.e += val;
-}
-
 int isnum(int c) {
   if(c >= '0' && c<='9')
     return 1;
