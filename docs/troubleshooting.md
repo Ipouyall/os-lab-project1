@@ -24,7 +24,7 @@ gdb
 
 for connecting debugger, you may need to run:
 ```shell
-target remote localhost:26000
+target remote tcp::26000
 ```
 ***
 ## breakpoints
@@ -156,6 +156,7 @@ or
 ```shell
 bt
 ```
+![backtrace](screenshots/troubleshooting/backtrace.png)
 ***
 ## disassemble
 ### to disassemble
