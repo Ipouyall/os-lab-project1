@@ -261,6 +261,16 @@ int isnum(int c) {
     return 0;
 }
 
+void killall(){
+  while(input.e != input.w && input.buf[(input.e-1) % INPUT_BUF] != '\n') {
+    if(input.e != input.w){
+      consputc(BACKSPACE);
+      shiftlinput();
+      input.e--;
+    }
+  }
+}
+
 void
 consoleintr(int (*getc)(void))
 {
@@ -274,11 +284,7 @@ consoleintr(int (*getc)(void))
       doprocdump = 1;
       break;
     case C('U'):  // Kill line.
-      while(input.e != input.w &&
-            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
-        input.e--;
-        consputc(BACKSPACE);
-      }
+      killall();
       break;
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
@@ -310,15 +316,21 @@ consoleintr(int (*getc)(void))
       break;
     }
     case C('R'): {
-      int first=2,end=3;
-      char tmp;
-      char c1 = input.buf[(input.e - first) % INPUT_BUF];
-      char c2 = input.buf[(input.e - end) % INPUT_BUF];
+      int size = input.end;
+      char tmp[size];
+      
+      for (int i = 0; i < size; i++)
+        tmp[i] = input.buf[(input.e - (i+1)) % INPUT_BUF];
 
-      chnagecursor(-1);
-      consputc(c2);
-      chnagecursor(-1);
-      consputc(c1); 
+      for (int i = 0; i < size; i++)
+        input.buf[(input.e - (size-i)) % INPUT_BUF] = tmp[i];
+
+      for (int i = 0; i < size; i++)
+        consputc(BACKSPACE);
+
+      for (int i = 0; i < size; i++)
+        consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
+
       break;
     }
     default:
