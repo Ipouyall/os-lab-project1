@@ -95,6 +95,12 @@ step
 next
 ```
 ***
+## to see the source code of current breakpoint:
+```shell
+list
+```
+![list](screenshots/troubleshooting/list.png)
+***
 ## print value of a variable
 ### to print value of variable
 ```shell
