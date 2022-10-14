@@ -284,6 +284,9 @@ consoleintr(int (*getc)(void))
       while (input.e < input.end){
         int pos = getcr();
         if(isnum(input.buf[(input.e) % INPUT_BUF])){
+          int pos=getcr();
+          changecr(++pos);
+          input.e++;
           consputc(BACKSPACE);
           shiftlinput();
           input.e--;
