@@ -238,6 +238,20 @@ shiftlinput() {
   changecr(pos);
 }
 
+void gotofirstofline() {
+  int pos;
+  pos = getcr();
+  int change;
+  change = pos%80 - 2;
+  input.e -= change;
+  changecr(pos - change);
+}
+int isnum(int c) {
+  if(c >= '0' && c<='9')
+    return 1;
+  else
+    return 0;
+}
 void
 consoleintr(int (*getc)(void))
 {
@@ -265,10 +279,17 @@ consoleintr(int (*getc)(void))
       }
       break;
     case C('N'):{
+      gotofirstofline();
       int pos;
       pos = getcr();
-      changecr(pos-1);
-      input.e -=1 ;
+      while (input.e < input.end){
+        if(isnum(input.buf[(input.e) % INPUT_BUF]))
+          input.buf[(input.e) % INPUT_BUF] = ' ';
+        else
+          input.buf[(input.e) % INPUT_BUF] = input.buf[(input.e) % INPUT_BUF];
+        consputc(input.buf[(input.e) % INPUT_BUF]);
+        input.e++;
+      }
       break;
     }
     case C('R'):{
