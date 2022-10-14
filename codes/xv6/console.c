@@ -259,13 +259,16 @@ consoleintr(int (*getc)(void))
       break;
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
-        input.e--;
         consputc(BACKSPACE);
+        shiftlinput();
+        input.e--;
       }
       break;
     case C('N'):{
       int pos;
       pos = getcr();
+      changecr(pos-1);
+      input.e -=1 ;
       break;
     }
     case C('R'):{
@@ -274,9 +277,17 @@ consoleintr(int (*getc)(void))
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
-        input.buf[input.e++ % INPUT_BUF] = c;
+        if(c == '\n' || c == C('D'))
+          input.buf[input.end++ % INPUT_BUF] = c;
+        else {
+          shiftrinput();
+          input.buf[input.e++ % INPUT_BUF] = c;
+        }
+
         consputc(c);
+
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
+          input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);
         }
