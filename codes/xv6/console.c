@@ -155,10 +155,7 @@ cgaputc(int c)
   int pos;
 
   // Cursor position: col + 80*row.
-  outb(CRTPORT, 14);
-  pos = inb(CRTPORT+1) << 8;
-  outb(CRTPORT, 15);
-  pos |= inb(CRTPORT+1);
+  pos = getcr();
 
   if(c == '\n')
     pos += 80 - pos%80;
@@ -176,11 +173,9 @@ cgaputc(int c)
     memset(crt+pos, 0, sizeof(crt[0])*(24*80 - pos));
   }
 
-  outb(CRTPORT, 14);
-  outb(CRTPORT+1, pos>>8);
-  outb(CRTPORT, 15);
-  outb(CRTPORT+1, pos);
-  crt[pos] = ' ' | 0x0700;
+  changecr(pos);
+  if(c == BACKSPACE)
+    crt[pos] = ' ' | 0x0700;
 }
 
 void
