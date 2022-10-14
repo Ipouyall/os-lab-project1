@@ -128,6 +128,27 @@ panic(char *s)
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
+// cursor
+int
+getcr() {
+  int pos;
+
+  outb(CRTPORT, 14);
+  pos = inb(CRTPORT+1) << 8;
+  outb(CRTPORT, 15);
+  pos |= inb(CRTPORT+1);
+
+  return pos;
+}
+
+static void 
+changecr(int pos) {
+  outb(CRTPORT, 14);
+  outb(CRTPORT+1, pos>>8);
+  outb(CRTPORT, 15);
+  outb(CRTPORT+1, pos);
+}
+
 static void
 cgaputc(int c)
 {
@@ -214,6 +235,8 @@ consoleintr(int (*getc)(void))
       }
       break;
     case C('N'):{
+      int pos;
+      pos = getcr();
       break;
     }
     case C('R'):{
