@@ -264,9 +264,8 @@ consoleintr(int (*getc)(void))
       break;
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
-        consputc(BACKSPACE);
-        shiftlinput();
         input.e--;
+        consputc(BACKSPACE);
       }
       break;
     case C('N'):{
