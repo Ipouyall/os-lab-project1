@@ -55,7 +55,6 @@ break *0x[address]
 ### to delete breakpoint
 if you want to delete breakpoint by number(you can see it in `info breakpoints`):
 ```shell
-```shell
 delete [breakpoint number]
 ```
 if you want to delete breakpoint by function name:
