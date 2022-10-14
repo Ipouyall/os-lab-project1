@@ -280,15 +280,20 @@ consoleintr(int (*getc)(void))
       break;
     case C('N'):{
       gotofirstofline();
-      int pos;
-      pos = getcr();
+
       while (input.e < input.end){
-        if(isnum(input.buf[(input.e) % INPUT_BUF]))
-          input.buf[(input.e) % INPUT_BUF] = ' ';
-        else
+        int pos = getcr();
+        if(isnum(input.buf[(input.e) % INPUT_BUF])){
+          consputc(BACKSPACE);
+          shiftlinput();
+          input.e--;
+        }
+        else{
           input.buf[(input.e) % INPUT_BUF] = input.buf[(input.e) % INPUT_BUF];
-        consputc(input.buf[(input.e) % INPUT_BUF]);
-        input.e++;
+          consputc(input.buf[(input.e) % INPUT_BUF]);
+          changecr(++pos);
+          input.e++;
+        }
       }
       break;
     }
