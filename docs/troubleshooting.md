@@ -163,6 +163,29 @@ bt
 ```
 ![backtrace](screenshots/troubleshooting/backtrace.png)
 ***
+## register(s) information
+### to print registers
+```shell
+info registers
+```
+![registers](screenshots/troubleshooting/info-regs.png)
+### to print register
+```shell
+info register [register name]
+```
+![register](screenshots/troubleshooting/info-reg.png)
+## variable(s)
+### to print variables
+```shell
+info variables
+```
+![variables](screenshots/troubleshooting/info-vars.png)
+![vars](screenshots/troubleshooting/info-vars2.png)
+### to print local variables
+```shell
+info locals
+```
+![locals](screenshots/troubleshooting/local-vars.png)
 ## disassemble
 ### to disassemble
 ```shell
