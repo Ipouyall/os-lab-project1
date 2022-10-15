@@ -220,3 +220,17 @@ layout src
 layout asm
 ```
 ![asm](screenshots/troubleshooting/tui-asmL.png)
+***
+## move between frames
+### to move to next frame
+![frame stack](screenshots/troubleshooting/tui-checkFrame.png)
+```shell
+up
+```
+![up](screenshots/troubleshooting/tui-up.png)
+### to move to previous frame
+```shell
+down
+```
+![down](screenshots/troubleshooting/tui-down.png)
+***
