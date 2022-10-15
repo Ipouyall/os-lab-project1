@@ -327,6 +327,11 @@ consoleintr(int (*getc)(void))
 
       break;
     }
+    case C('G'): {
+      char a[2],b[2];
+      startswith(a,b);
+      break;
+    }
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
