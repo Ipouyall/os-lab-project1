@@ -14,7 +14,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
-#include "perdiction.h"
+#include "perfixperdiction.h"
 
 static void consputc(int);
 
