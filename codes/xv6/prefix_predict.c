@@ -38,7 +38,7 @@ char* printcommand(char key[]){
             }
     }
     else {
-        int endIndex = ((command_num % 15) + 4) % 15 ;
+        int endIndex = ((command_num % 15) + 14) % 15 ;
         int i = ( command_num % 15);
         while (i != endIndex)
         {
