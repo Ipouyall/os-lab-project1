@@ -28,6 +28,15 @@ int startswith(char *pre, char *str)
 {
    if(strncmp(str, pre, strlen(pre)) == 0) return 1;
    return 0;
+
+   /*
+       int len1=strlen(pre),len2=strlen(str);
+    if(len1>len2) return 0;
+    else
+        for (int i = 0; i < len1; i++)
+            if (pre[i]!=str[i])
+                return 0;
+   return 1;*/
 }
 char* printcommand(char key[]){
     if(sizeCommand<15){

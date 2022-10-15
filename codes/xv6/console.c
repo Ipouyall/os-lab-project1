@@ -329,11 +329,34 @@ consoleintr(int (*getc)(void))
       break;
     }
     case '\t': {
-      char key[30];
+      char key[30],res[30];
       for (int i = 0; i + input.w < input.e; i++)
         key[i] = input.buf[input.w + i % INPUT_BUF];
-      
+      if(sizeCommand<15){
+          for (int i = sizeCommand; i >= 0; i--)
+              if(startswith(key,command[i])) {
+                  strncpy(res,command[i],30);
+              }
+      }
+      else {
+          int endIndex = ((command_num % 15) + 14) % 15 ;
+          int i = ( command_num % 15);
+          while (i != endIndex)
+          {
+              if(startswith(key,command[i])) {
+                  strncpy(res,command[i],30);
+              }
+              i++;
+              if(i==15) i = 0;
+          }
+          if(startswith(key,command[i])) strncpy(res,command[i],30);
+
+      }
       killall();
+      consputc(res[0]);
+      consputc(res[1]);
+      consputc(res[2]);
+
       break;
     }
     default:
