@@ -159,7 +159,7 @@ _forktest: forktest.o $(ULIB)
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
-prefix_predict: prefix_predict.c prefix_predict.h
+prefix_predict.o: prefix_predict.c prefix_predict.h
 	gcc -Werror -Wall -o prefix_predict.o prefix_predict.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
