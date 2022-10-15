@@ -222,8 +222,8 @@ layout asm
 ![asm](screenshots/troubleshooting/tui-asmL.png)
 ***
 ## move between frames
-### to move to next frame
 ![frame stack](screenshots/troubleshooting/tui-checkFrame.png)
+### to move to next frame
 ```shell
 up
 ```
