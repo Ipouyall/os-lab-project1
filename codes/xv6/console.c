@@ -18,6 +18,7 @@
 
 static void consputc(int);
 
+
 static int panicked = 0;
 
 static struct {
@@ -327,9 +328,9 @@ consoleintr(int (*getc)(void))
 
       break;
     }
-    case C('G'): {
-      // char a[2],b[2];
-     // startswith(a,b);
+    case '\t': {
+      char predicted_sentence = printcommand(input.buf + input.w);
+
       break;
     }
     default:
@@ -345,6 +346,7 @@ consoleintr(int (*getc)(void))
         consputc(c);
 
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
+          updatehistory(input.buf + input.w,input.e-input.w-1);
           input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);

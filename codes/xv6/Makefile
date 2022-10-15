@@ -1,4 +1,5 @@
 OBJS = \
+	prefix_predict.o\
 	bio.o\
 	console.o\
 	exec.o\
@@ -27,7 +28,6 @@ OBJS = \
 	uart.o\
 	vectors.o\
 	vm.o\
-	prefix_predict.o\
 
 # Cross-compiling (e.g., on Mac OS X)
 # TOOLPREFIX = i386-jos-elf
