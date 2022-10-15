@@ -329,15 +329,13 @@ consoleintr(int (*getc)(void))
       break;
     }
     case '\t': {
-      char key[30],res[30];
-      for (int i = 0; i + input.w < input.e; i++)
-        key[i] = input.buf[input.w + i % INPUT_BUF];
-      if(sizeCommand<15){
-          for (int i = sizeCommand; i >= 0; i--)
-              if(startswith(key,command[i])) {
+      char res[30];
+      char* key;
+      key = input.buf + input.w; 
+      if(sizeCommand<15)
+          for (int i = 0; i < sizeCommand; i++)
+              if(startswith(key,command[i]))
                   strncpy(res,command[i],30);
-              }
-      }
       else {
           int endIndex = ((command_num % 15) + 14) % 15 ;
           int i = ( command_num % 15);
@@ -352,10 +350,11 @@ consoleintr(int (*getc)(void))
           if(startswith(key,command[i])) strncpy(res,command[i],30);
 
       }
-      killall();
-      consputc(res[0]);
-      consputc(res[1]);
-      consputc(res[2]);
+      for (int i = 0; i < strlen(res); i++)
+      {
+        consputc(res[i]);
+        input.e++;
+      }
 
       break;
     }
@@ -372,9 +371,8 @@ consoleintr(int (*getc)(void))
         consputc(c);
 
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
-          char key[30];
-          for (int i = 0; i + input.w < input.e; i++)
-            key[i] = input.buf[input.w + i % INPUT_BUF];
+          char* key;
+          key = input.buf + input.w; 
           updatehistory(key,input.e-input.w);
           input.e = input.end;
           input.w = input.e;
