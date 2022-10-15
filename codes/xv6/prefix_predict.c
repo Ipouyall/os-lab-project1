@@ -1,5 +1,4 @@
 #include "prefix_predict.h"
-#include "cstring.h"
 
 int startswith(char *pre, char *str)
 {
