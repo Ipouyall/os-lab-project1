@@ -209,3 +209,14 @@ to open, press ```Ctrl + X + R```.
 
 for example, if we add breakpoint for ```console.c:196```:
 ![gdb-tui](screenshots/troubleshooting/tui-intro.png)
+
+### for source code
+```shell
+layout src
+```
+![src](screenshots/troubleshooting/tui-srcL.png)
+### for assembly
+```shell
+layout asm
+```
+![asm](screenshots/troubleshooting/tui-asmL.png)
