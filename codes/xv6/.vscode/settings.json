@@ -8,7 +8,8 @@
         "stdio.h": "c",
         "cstring": "c",
         "defs.h": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "sleeplock.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
