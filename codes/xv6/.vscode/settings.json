@@ -2,7 +2,8 @@
     "files.associations": {
         "user.h": "c",
         "fcntl.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "prefix_predict.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

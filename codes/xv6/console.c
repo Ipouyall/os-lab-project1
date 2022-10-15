@@ -14,7 +14,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
-#include "perfix_predict.h"
+#include "prefix_predict.h"
 
 static void consputc(int);
 
