@@ -329,33 +329,39 @@ consoleintr(int (*getc)(void))
       break;
     }
     case '\t': {
-      char res[30];
+      int index=-1;
       char* key;
       key = input.buf + input.w; 
       if(sizeCommand<15)
           for (int i = 0; i < sizeCommand; i++)
               if(startswith(key,command[i]))
-                  strncpy(res,command[i],30);
+                  index = i;
       else {
           int endIndex = ((command_num % 15) + 14) % 15 ;
           int i = ( command_num % 15);
           while (i != endIndex)
           {
               if(startswith(key,command[i])) {
-                  strncpy(res,command[i],30);
+                  index = i;
               }
               i++;
               if(i==15) i = 0;
           }
-          if(startswith(key,command[i])) strncpy(res,command[i],30);
+          if(startswith(key,command[i])) index = i;
 
       }
-      for (int i = 0; i < strlen(res); i++)
-      {
-        consputc(res[i]);
-        input.e++;
+      if(index!=-1){
+        int size = input.e-input.w-11;
+        for (int i = 0; i < size; i++)
+          consputc(BACKSPACE);
+        for (int i = 0; i < strlen(command[index])-1; i++)
+          input.buf[(input.e - (size-i)) % INPUT_BUF] = command[index][i];
+        for (int i = 0; i < strlen(command[index])-1; i++)
+          consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
+        for (int i = 0; i < strlen(command[index])-1; i++)
+          input.e++;
       }
-
+      input.e--;
       break;
     }
     default:
@@ -374,6 +380,7 @@ consoleintr(int (*getc)(void))
           char* key;
           key = input.buf + input.w; 
           updatehistory(key,input.e-input.w);
+          sizeCommand++;
           input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);
