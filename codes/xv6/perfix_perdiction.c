@@ -14,7 +14,7 @@ void updatehistory(char inp[]) {
     if(size<5) size++;
 
 }
-void print(char key[]){
+void printcommand(char key[]){
 
     if(size<5){
         for (int i = 0; i < size; i++)

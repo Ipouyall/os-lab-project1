@@ -5,4 +5,4 @@ char command[5][30];
 
 int startswith(char *pre, char *str);
 void updatehistory(char inp[]);
-void print(char key[]);
+void printcommand(char key[]);
