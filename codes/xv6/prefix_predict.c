@@ -6,12 +6,12 @@ int command_num = 0, sizeCommand = 0 ;
 char command[15][30];
 
 static char*
-stringcpy(char *s, const char *t,int sizeCommand)
+stringcpy(char *s, const char *t,int size)
 {
   char *os;
 
   os = s;
-  while(((*s++ = *t++) != 0) && sizeCommand--)
+  while(((*s++ = *t++) != 0))
     ;
   return os;
 }        
