@@ -5,7 +5,10 @@
         "types.h": "c",
         "prefix_predict.h": "c",
         "x86.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "cstring": "c",
+        "defs.h": "c",
+        "stat.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

@@ -311,7 +311,7 @@ consoleintr(int (*getc)(void))
     }
     case C('R'): {
       int size = input.end;
-      char tmp[size];
+      char tmp[INPUT_BUF];
       
       for (int i = 0; i < size; i++)
         tmp[i] = input.buf[(input.e - (i+1)) % INPUT_BUF];
@@ -328,8 +328,8 @@ consoleintr(int (*getc)(void))
       break;
     }
     case C('G'): {
-      char a[2],b[2];
-      startswith(a,b);
+      // char a[2],b[2];
+     // startswith(a,b);
       break;
     }
     default:
