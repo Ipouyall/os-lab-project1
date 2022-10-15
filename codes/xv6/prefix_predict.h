@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 
 int command_num=0,size=0;
 char command[5][30];
