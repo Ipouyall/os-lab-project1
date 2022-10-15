@@ -1,10 +1,10 @@
 #include "prefix_predict.h"
+#include <string.h>
 
 int startswith(char *pre, char *str)
 {
-    size_t lenpre = strlen(pre),
-           lenstr = strlen(str);
-    return lenstr < lenpre ? 0 : memcmp(pre, str, lenpre) == 0;
+   if(strncmp(str, pre, strlen(pre)) == 0) return 1;
+   return 0;
 }
 void updatehistory(char inp[]) {
 
