@@ -203,3 +203,9 @@ or
 ```shell
 disas [function name]
 ```
+***
+## gdb TUI
+to open, press ```Ctrl + X + R```.
+
+for example, if we add breakpoint for ```console.c:196```:
+![gdb-tui](screenshots/troubleshooting/tui-intro.png)
