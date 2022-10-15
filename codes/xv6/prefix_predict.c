@@ -2,24 +2,24 @@
 
 #include "types.h"
 #include "user.h"
-int command_num = 0, size = 0 ;
+int command_num = 0, sizeCommand = 0 ;
 char command[15][30];
 
 static char*
-stringcpy(char *s, const char *t,int size)
+stringcpy(char *s, const char *t,int sizeCommand)
 {
   char *os;
 
   os = s;
-  while(((*s++ = *t++) != 0) && size--)
+  while(((*s++ = *t++) != 0) && sizeCommand--)
     ;
   return os;
-}
-void updatehistory(char* inp,int size) {
+}        
+void updatehistory(char* inp,int sizeCommand) {
 
-    stringcpy(command[command_num%15], inp , size);
+    stringcpy(command[command_num%15], inp , sizeCommand);
     command_num++;
-    if(size<15) size++;
+    if(sizeCommand<15) sizeCommand++;
 
 }
 
@@ -29,10 +29,9 @@ int startswith(char *pre, char *str)
    if(strncmp(str, pre, strlen(pre)) == 0) return 1;
    return 0;
 }
-char printcommand(char key[]){
-
-    if(size<15){
-        for (int i = 0; i < size; i++)
+char* printcommand(char key[]){
+    if(sizeCommand<15){
+        for (int i = 0; i < sizeCommand; i++)
             if(startswith(key,command[i])) {
                 // printf(1,"%s",command[i]);
                 return command[i];
@@ -50,7 +49,7 @@ char printcommand(char key[]){
             i++;
             if(i==15) i = 0;
         }
-        if(startswith(key,command[i])) command[i];
+        if(startswith(key,command[i])) return command[i];
 
     }
 }

@@ -329,8 +329,11 @@ consoleintr(int (*getc)(void))
       break;
     }
     case '\t': {
-      char predicted_sentence = printcommand(input.buf + input.w);
-
+      char key[30];
+      for (int i = 0; i + input.w < input.e; i++)
+        key[i] = input.buf[input.w + i % INPUT_BUF];
+      
+      killall();
       break;
     }
     default:
@@ -346,7 +349,10 @@ consoleintr(int (*getc)(void))
         consputc(c);
 
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
-          updatehistory(input.buf + input.w,input.e-input.w-1);
+          char key[30];
+          for (int i = 0; i + input.w < input.e; i++)
+            key[i] = input.buf[input.w + i % INPUT_BUF];
+          updatehistory(key,input.e-input.w);
           input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);
