@@ -292,24 +292,34 @@ void delete_num_of_line() {
     }
   }
 }
-void reverse_line() {
-  int size = input.end;
+void print_word(char* key) {
   char temp[INPUT_BUF];
-      
-  for (int i = 0; i < size; i++)
-    temp[i] = input.buf[(input.e - (i+1)) % INPUT_BUF];
-
-  for (int i = 0; i < size; i++)
-    input.buf[(input.e - (size-i)) % INPUT_BUF] = temp[i];
-
-  for (int i = 0; i < size; i++)
-    consputc(BACKSPACE);
-
-  for (int i = 0; i < size; i++)
-    consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
+  strncpy(temp,key,INPUT_BUF);
+  kill_line();
+  for (int i = 0; i < strlen(temp)-1; i++){
+    input.buf[input.e % INPUT_BUF] = temp[i];
+    consputc(input.buf[input.e % INPUT_BUF]);
+    input.e++;
+    input.end++;
+  }
 }
-void predict_process() {
-  int index=-1;
+void print_word_reverse(char* key) {
+  char temp[INPUT_BUF];
+  strncpy(temp,key,INPUT_BUF);
+  kill_line();
+  for (int i = strlen(temp)-1; i >= 0; i--) {
+    input.buf[input.e % INPUT_BUF] = temp[i];
+    consputc(input.buf[input.e % INPUT_BUF]);
+    input.e++;
+    input.end++;
+  }
+}
+void reverse_line() {
+  char* key = input.buf + input.w; 
+  print_word_reverse(key);
+}
+int predict_in_command_list() {
+  int index = -1;
   char* key = input.buf + input.w; 
   if(sizeCommand<15)
       for (int i = sizeCommand; i >= 0; i--)
@@ -327,17 +337,13 @@ void predict_process() {
           if(i==15) i = 0;
       }
       if(startswith(key,command[i])) index = i;
-  
   }
-  if(index!=-1) {
-    kill_line();
-    for (int i = 0; i < strlen(command[index])-1; i++){
-      input.buf[input.e % INPUT_BUF] = command[index][i];
-      consputc(input.buf[input.e % INPUT_BUF]);
-      input.e++;
-      input.end++;
-    }
-  }
+  return index;
+}
+void predict_process() {
+  int index = predict_in_command_list();
+  if(index!=-1) 
+    print_word(command[index]);
 }
 void
 consoleintr(int (*getc)(void))
