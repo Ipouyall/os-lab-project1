@@ -132,7 +132,7 @@ static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
 // cursor
 int
-getcr() {
+get_pos() {
   int pos;
 
   outb(CRTPORT, 14);
@@ -144,7 +144,7 @@ getcr() {
 }
 
 static void 
-changepos(int pos) {
+change_pos(int pos) {
   outb(CRTPORT, 14);
   outb(CRTPORT+1, pos>>8);
   outb(CRTPORT, 15);
@@ -157,7 +157,7 @@ cgaputc(int c)
   int pos;
 
   // Cursor position: col + 80*row.
-  pos = getcr();
+  pos = get_pos();
 
   if(c == '\n')
     pos += 80 - pos%80;
@@ -175,7 +175,7 @@ cgaputc(int c)
     memset(crt+pos, 0, sizeof(crt[0])*(24*80 - pos));
   }
 
-  changepos(pos);
+  change_pos(pos);
   if(c == BACKSPACE)
     crt[pos] = ' ' | 0x0700;
 }
@@ -208,27 +208,27 @@ struct {
 #define C(x)  ((x)-'@')  // Control-x
 
 void
-shiftrinput() {
+shift_input_right() {
   int index, next_char, pos;
-  pos = getcr();
-  changepos(pos + 1);
+  pos = get_pos();
+  change_pos(pos + 1);
   index = input.e;
   next_char = input.buf[index % INPUT_BUF];
   while(index < input.end) {
-    int tmp = next_char;
+    int temp = next_char;
     next_char = input.buf[(index + 1) % INPUT_BUF];
-    input.buf[(index + 1) % INPUT_BUF] = tmp;
+    input.buf[(index + 1) % INPUT_BUF] = temp;
     consputc(input.buf[(index + 1) % INPUT_BUF]);
     index++;
   }
   input.end++;
-  changepos(pos);
+  change_pos(pos);
 }
 
 void
-shiftlinput() {
+shift_input_left() {
   int index, pos;
-  pos = getcr();
+  pos = get_pos();
   index = input.e - 1;
   while(index < input.end) {
     input.buf[index % INPUT_BUF] = input.buf[(index + 1) % INPUT_BUF];
@@ -237,35 +237,108 @@ shiftlinput() {
   }
   consputc(' ');
   input.end--;
-  changepos(pos);
+  change_pos(pos);
 }
 
-void gotofirstofline() {
+void go_to_first_of_line() {
   int pos;
-  pos = getcr();
+  pos = get_pos();
   int change;
   change = pos%80 - 2;
   input.e -= change;
-  changepos(pos - change);
+  change_pos(pos - change);
 }
 
-int isnum(int c) {
+int is_num(int c) {
   if(c >= '0' && c<='9')
     return 1;
   else
     return 0;
 }
 
-void killall(){
+void kill_line(){
   while(input.e != input.w && input.buf[(input.e-1) % INPUT_BUF] != '\n') {
     if(input.e != input.w){
       consputc(BACKSPACE);
-      shiftlinput();
+      shift_input_left();
       input.e--;
     }
   }
 }
+void back_space() {
+    if(input.e != input.w){
+    consputc(BACKSPACE);
+    shift_input_left();
+    input.e--;
+  }
+}
+void delete_num_of_line() {
+  go_to_first_of_line();
+  while (input.e < input.end){
+    int pos = get_pos();
+    if(is_num(input.buf[(input.e) % INPUT_BUF])){
+      int pos=get_pos();
+      change_pos(++pos);
+      input.e++;
+      consputc(BACKSPACE);
+      shift_input_left();
+      input.e--;
+    }
+    else{
+      input.buf[(input.e) % INPUT_BUF] = input.buf[(input.e) % INPUT_BUF];
+      consputc(input.buf[(input.e) % INPUT_BUF]);
+      change_pos(++pos);
+      input.e++;
+    }
+  }
+}
+void reverse_line() {
+  int size = input.end;
+  char temp[INPUT_BUF];
+      
+  for (int i = 0; i < size; i++)
+    temp[i] = input.buf[(input.e - (i+1)) % INPUT_BUF];
 
+  for (int i = 0; i < size; i++)
+    input.buf[(input.e - (size-i)) % INPUT_BUF] = temp[i];
+
+  for (int i = 0; i < size; i++)
+    consputc(BACKSPACE);
+
+  for (int i = 0; i < size; i++)
+    consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
+}
+void predict_process() {
+  int index=-1;
+  char* key = input.buf + input.w; 
+  if(sizeCommand<15)
+      for (int i = sizeCommand; i >= 0; i--)
+          if(startswith(key,command[i]))
+              index = i;
+  else {
+      int endIndex = ((command_num % 15) + 14) % 15 ;
+      int i = ( command_num % 15);
+      while (i != endIndex)
+      {
+          if(startswith(key,command[i])) {
+              index = i;
+          }
+          i++;
+          if(i==15) i = 0;
+      }
+      if(startswith(key,command[i])) index = i;
+  
+  }
+  if(index!=-1) {
+    kill_line();
+    for (int i = 0; i < strlen(command[index])-1; i++){
+      input.buf[input.e % INPUT_BUF] = command[index][i];
+      consputc(input.buf[input.e % INPUT_BUF]);
+      input.e++;
+      input.end++;
+    }
+  }
+}
 void
 consoleintr(int (*getc)(void))
 {
@@ -278,86 +351,22 @@ consoleintr(int (*getc)(void))
       // procdump() locks cons.lock indirectly; invoke later
       doprocdump = 1;
       break;
-    case C('U'):  // Kill line.
-      killall();
+    case C('U'):
+      kill_line();
       break;
-    case C('H'): case '\x7f':  // Backspace
-      if(input.e != input.w){
-        consputc(BACKSPACE);
-        shiftlinput();
-        input.e--;
-      }
+    case C('H'): case '\x7f':
+      back_space();
       break;
     case C('N'):{
-      gotofirstofline();
-
-      while (input.e < input.end){
-        int pos = getcr();
-        if(isnum(input.buf[(input.e) % INPUT_BUF])){
-          int pos=getcr();
-          changepos(++pos);
-          input.e++;
-          consputc(BACKSPACE);
-          shiftlinput();
-          input.e--;
-        }
-        else{
-          input.buf[(input.e) % INPUT_BUF] = input.buf[(input.e) % INPUT_BUF];
-          consputc(input.buf[(input.e) % INPUT_BUF]);
-          changepos(++pos);
-          input.e++;
-        }
-      }
+      delete_num_of_line();
       break;
     }
     case C('R'): {
-      int size = input.end;
-      char tmp[INPUT_BUF];
-      
-      for (int i = 0; i < size; i++)
-        tmp[i] = input.buf[(input.e - (i+1)) % INPUT_BUF];
-
-      for (int i = 0; i < size; i++)
-        input.buf[(input.e - (size-i)) % INPUT_BUF] = tmp[i];
-
-      for (int i = 0; i < size; i++)
-        consputc(BACKSPACE);
-
-      for (int i = 0; i < size; i++)
-        consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
-
+      reverse_line();
       break;
     }
     case '\t': {
-      int index=-1;
-      char* key = input.buf + input.w; 
-      if(sizeCommand<15)
-          for (int i = sizeCommand; i >= 0; i--)
-              if(startswith(key,command[i]))
-                  index = i;
-      else {
-          int endIndex = ((command_num % 15) + 14) % 15 ;
-          int i = ( command_num % 15);
-          while (i != endIndex)
-          {
-              if(startswith(key,command[i])) {
-                  index = i;
-              }
-              i++;
-              if(i==15) i = 0;
-          }
-          if(startswith(key,command[i])) index = i;
-
-      }
-      if(index!=-1){
-        killall();
-        for (int i = 0; i < strlen(command[index])-1; i++){
-          input.buf[input.e % INPUT_BUF] = command[index][i];
-          consputc(input.buf[input.e % INPUT_BUF]);
-          input.e++;
-          input.end++;
-        }
-      }
+      predict_process();
       break;
     }
     default:
@@ -366,7 +375,7 @@ consoleintr(int (*getc)(void))
         if(c == '\n' || c == C('D'))
           input.buf[input.end++ % INPUT_BUF] = c;
         else {
-          shiftrinput();
+          shift_input_right();
           input.buf[input.e++ % INPUT_BUF] = c;
         }
 
@@ -374,8 +383,8 @@ consoleintr(int (*getc)(void))
 
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
           char* key;
-          key = input.buf + input.w; 
-          updatehistory(key,input.e-input.w);
+          key = input.buf + input.w;
+          updatehistory(key, input.e - input.w);
           sizeCommand++;
           command_num++;
           input.e = input.end;
