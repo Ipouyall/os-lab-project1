@@ -332,7 +332,7 @@ consoleintr(int (*getc)(void))
       int index=-1;
       char* key = input.buf + input.w; 
       if(sizeCommand<15)
-          for (int i = 0; i < sizeCommand; i++)
+          for (int i = sizeCommand; i >= 0; i--)
               if(startswith(key,command[i]))
                   index = i;
       else {
@@ -353,8 +353,7 @@ consoleintr(int (*getc)(void))
         killall();
         for (int i = 0; i < strlen(command[index])-1; i++){
           input.buf[input.e % INPUT_BUF] = command[index][i];
-          consputc(command[index][i]);
-          input.e++;
+          consputc(input.buf[input.e++ % INPUT_BUF]);
         }
       }
       break;
