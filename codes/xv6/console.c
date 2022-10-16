@@ -351,17 +351,11 @@ consoleintr(int (*getc)(void))
 
       }
       if(index!=-1){
-        int size = input.e-input.w-11;
-        for (int i = 0; i < size; i++)
-          consputc(BACKSPACE);
+        int size = input.e-input.w;
+        killall();
         for (int i = 0; i < strlen(command[index])-1; i++)
-          input.buf[(input.e - (size-i)) % INPUT_BUF] = command[index][i];
-        for (int i = 0; i < strlen(command[index])-1; i++)
-          consputc(input.buf[(input.e - (size-i)) % INPUT_BUF]);
-        for (int i = 0; i < strlen(command[index])-1; i++)
-          input.e++;
+          consputc(command[index][i]);
       }
-      input.e--;
       break;
     }
     default:
