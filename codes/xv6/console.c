@@ -330,8 +330,7 @@ consoleintr(int (*getc)(void))
     }
     case '\t': {
       int index=-1;
-      char* key;
-      key = input.buf + input.w; 
+      char* key = input.buf + input.w; 
       if(sizeCommand<15)
           for (int i = 0; i < sizeCommand; i++)
               if(startswith(key,command[i]))
@@ -351,10 +350,12 @@ consoleintr(int (*getc)(void))
 
       }
       if(index!=-1){
-        int size = input.e-input.w;
         killall();
-        for (int i = 0; i < strlen(command[index])-1; i++)
+        for (int i = 0; i < strlen(command[index])-1; i++){
+          input.buf[input.e % INPUT_BUF] = command[index][i];
           consputc(command[index][i]);
+          input.e++;
+        }
       }
       break;
     }
@@ -375,6 +376,7 @@ consoleintr(int (*getc)(void))
           key = input.buf + input.w; 
           updatehistory(key,input.e-input.w);
           sizeCommand++;
+          command_num++;
           input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);
