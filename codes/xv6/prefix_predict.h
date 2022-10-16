@@ -1,5 +1,6 @@
-extern int command_num ,sizeCommand ;
-extern char command[15][30];
+#define MAX_COMMAND_NUM 15
+extern int command_num ,size_command ;
+extern char command[MAX_COMMAND_NUM][128];
 
-int startswith(char *pre, char *str);
-void updatehistory(char* inp,int sizeCommand);
+int starts_with(char *pre, char *str);
+void update_history(char* inp,int size_command);

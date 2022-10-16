@@ -2,8 +2,8 @@
 
 #include "types.h"
 #include "user.h"
-int command_num = 0, sizeCommand = 0 ;
-char command[15][30];
+int command_num = 0, size_command = 0 ;
+char command[MAX_COMMAND_NUM][128];
 
 static char* stringcpy(char *s, const char *t,int size)
 {
@@ -14,14 +14,14 @@ static char* stringcpy(char *s, const char *t,int size)
     ;
   return os;
 }        
-void updatehistory(char* inp,int sizeCommand) {
+void update_history(char* inp,int size_command) {
 
-    stringcpy(command[command_num%15], inp , sizeCommand);
+    stringcpy(command[command_num % MAX_COMMAND_NUM ], inp , size_command);
     command_num++;
-    if(sizeCommand<15) sizeCommand++;
+    if(size_command < MAX_COMMAND_NUM) size_command++;
 
 }
-int startswith(char *pre, char *str)
+int starts_with(char *pre, char *str)
 {
    if(strncmp(str, pre, strlen(pre)) == 0) return 1;
    return 0;
