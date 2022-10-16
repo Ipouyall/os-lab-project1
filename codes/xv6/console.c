@@ -308,22 +308,22 @@ void reverse_line() {
 int predict_in_command_list() {
   int index = -1;
   char* key = input.buf + input.w; 
-  if(sizeCommand<15)
-      for (int i = sizeCommand; i >= 0; i--)
-          if(startswith(key,command[i]))
+  if(size_command<MAX_COMMAND_NUM)
+      for (int i = size_command; i >= 0; i--)
+          if(starts_with(key,command[i]))
               index = i;
   else {
-      int endIndex = ((command_num % 15) + 14) % 15 ;
-      int i = ( command_num % 15);
+      int endIndex = ((command_num % MAX_COMMAND_NUM) + (MAX_COMMAND_NUM - 1)) % MAX_COMMAND_NUM ;
+      int i = ( command_num % MAX_COMMAND_NUM);
       while (i != endIndex)
       {
-          if(startswith(key,command[i])) {
+          if(starts_with(key,command[i])) {
               index = i;
           }
           i++;
-          if(i==15) i = 0;
+          if(i == MAX_COMMAND_NUM) i = 0;
       }
-      if(startswith(key,command[i])) index = i;
+      if(starts_with(key,command[i])) index = i;
   }
   return index;
 }
@@ -376,8 +376,8 @@ void consoleintr(int (*getc)(void))
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
           char* key;
           key = input.buf + input.w;
-          updatehistory(key, input.e - input.w);
-          sizeCommand++;
+          update_history(key, input.e - input.w);
+          size_command++;
           command_num++;
           input.e = input.end;
           input.w = input.e;
