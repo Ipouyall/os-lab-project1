@@ -353,7 +353,9 @@ consoleintr(int (*getc)(void))
         killall();
         for (int i = 0; i < strlen(command[index])-1; i++){
           input.buf[input.e % INPUT_BUF] = command[index][i];
-          consputc(input.buf[input.e++ % INPUT_BUF]);
+          consputc(input.buf[input.e % INPUT_BUF]);
+          input.e++;
+          input.end++;
         }
       }
       break;
