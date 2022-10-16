@@ -313,7 +313,8 @@ int predict_in_command_list() {
           if(starts_with(key,command[i]))
               index = i;
   else {
-      int endIndex = ((command_num % MAX_COMMAND_NUM) + (MAX_COMMAND_NUM - 1)) % MAX_COMMAND_NUM ;
+      int endIndex = ((command_num % MAX_COMMAND_NUM) + (MAX_COMMAND_NUM - 1))
+      % MAX_COMMAND_NUM ;
       int i = ( command_num % MAX_COMMAND_NUM);
       while (i != endIndex)
       {
