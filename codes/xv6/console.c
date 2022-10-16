@@ -26,8 +26,7 @@ static struct {
   int locking;
 } cons;
 
-static void
-printint(int xx, int base, int sign)
+static void printint(int xx, int base, int sign)
 {
   static char digits[] = "0123456789abcdef";
   char buf[16];
@@ -53,8 +52,7 @@ printint(int xx, int base, int sign)
 //PAGEBREAK: 50
 
 // Print to the console. only understands %d, %x, %p, %s.
-void
-cprintf(char *fmt, ...)
+void cprintf(char *fmt, ...)
 {
   int i, c, locking;
   uint *argp;
@@ -105,8 +103,7 @@ cprintf(char *fmt, ...)
     release(&cons.lock);
 }
 
-void
-panic(char *s)
+void panic(char *s)
 {
   int i;
   uint pcs[10];
@@ -130,9 +127,7 @@ panic(char *s)
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
-// cursor
-int
-get_pos() {
+int get_pos() {
   int pos;
 
   outb(CRTPORT, 14);
@@ -143,16 +138,14 @@ get_pos() {
   return pos;
 }
 
-static void 
-change_pos(int pos) {
+static void change_pos(int pos) {
   outb(CRTPORT, 14);
   outb(CRTPORT+1, pos>>8);
   outb(CRTPORT, 15);
   outb(CRTPORT+1, pos);
 }
 
-static void
-cgaputc(int c)
+static void cgaputc(int c)
 {
   int pos;
 
@@ -180,8 +173,7 @@ cgaputc(int c)
     crt[pos] = ' ' | 0x0700;
 }
 
-void
-consputc(int c)
+void consputc(int c)
 {
   if(panicked){
     cli();
@@ -207,8 +199,7 @@ struct {
 
 #define C(x)  ((x)-'@')  // Control-x
 
-void
-shift_input_right() {
+void shift_input_right() {
   int index, next_char, pos;
   pos = get_pos();
   change_pos(pos + 1);
@@ -225,8 +216,7 @@ shift_input_right() {
   change_pos(pos);
 }
 
-void
-shift_input_left() {
+void shift_input_left() {
   int index, pos;
   pos = get_pos();
   index = input.e - 1;
@@ -250,10 +240,7 @@ void go_to_first_of_line() {
 }
 
 int is_num(int c) {
-  if(c >= '0' && c<='9')
-    return 1;
-  else
-    return 0;
+  return (c >= '0' && c<='9') ? 1 : 0;
 }
 
 void kill_line(){
@@ -345,8 +332,7 @@ void predict_process() {
   if(index!=-1) 
     print_word(command[index]);
 }
-void
-consoleintr(int (*getc)(void))
+void consoleintr(int (*getc)(void))
 {
   int c, doprocdump = 0;
 
@@ -407,8 +393,7 @@ consoleintr(int (*getc)(void))
   }
 }
 
-int
-consoleread(struct inode *ip, char *dst, int n)
+int consoleread(struct inode *ip, char *dst, int n)
 {
   uint target;
   int c;
@@ -445,8 +430,7 @@ consoleread(struct inode *ip, char *dst, int n)
   return target - n;
 }
 
-int
-consolewrite(struct inode *ip, char *buf, int n)
+int consolewrite(struct inode *ip, char *buf, int n)
 {
   int i;
 
@@ -460,8 +444,7 @@ consolewrite(struct inode *ip, char *buf, int n)
   return n;
 }
 
-void
-consoleinit(void)
+void consoleinit(void)
 {
   initlock(&cons.lock, "console");
 

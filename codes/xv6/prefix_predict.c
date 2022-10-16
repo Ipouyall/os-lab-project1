@@ -5,8 +5,7 @@
 int command_num = 0, sizeCommand = 0 ;
 char command[15][30];
 
-static char*
-stringcpy(char *s, const char *t,int size)
+static char* stringcpy(char *s, const char *t,int size)
 {
   char *os;
 
